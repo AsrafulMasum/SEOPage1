@@ -1,12 +1,11 @@
-
+import Card from "./Components/Card";
 
 function App() {
-
   return (
     <>
-      <h1>Vite + React</h1>
+      <Card></Card>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

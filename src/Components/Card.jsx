@@ -4,9 +4,14 @@ import { GrAttachment } from "react-icons/gr";
 import { FaRegCalendarDays } from "react-icons/fa6";
 
 const Card = () => {
+
+  const handleAttachment = () => {
+    console.log("clicked");
+  }
+
   return (
     <>
-      <div className="w-full max-w-sm px-4 py-3 bg-white rounded-md shadow-lg">
+      <div className="w-96 px-4 py-3 bg-white rounded-md shadow-lg">
         <div className="flex items-center justify-between">
           <span className="flex items-center gap-2 font-semibold">
             <div className="avatar">
@@ -48,12 +53,12 @@ const Card = () => {
               <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
             </div>
           </div>
-          <p className="font-semibold text-sm">12+</p>
+          <p className="font-semibold text-sm bg-gray-100 p-[6px] rounded-full">12+</p>
           <div className="flex items-center gap-1 text-gray-600">
             <RiWechatLine className="text-lg" />
             <p className="font-semibold text-sm">15</p>
           </div>
-          <div className="flex items-center gap-1">
+          <div onClick={handleAttachment} className="flex items-center gap-1 cursor-pointer">
             <GrAttachment />
             <p className="font-semibold text-sm">0</p>
           </div>

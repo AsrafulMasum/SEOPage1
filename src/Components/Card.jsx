@@ -6,11 +6,15 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import useAxiosPublic from "../Hooks/useAxiosPublic";
+import useLoadPublicData from "../Hooks/useLoadPublicData";
 
 const imgHostingKey = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const imgHostingApi = `https://api.imgbb.com/1/upload?key=${imgHostingKey}`;
 
 const Card = () => {
+  const axiosPublic = useAxiosPublic();
+  const {data, refetch} = useLoadPublicData("/files")
   const { register, handleSubmit } = useForm();
 
   let [isOpen, setIsOpen] = useState(false);
@@ -31,14 +35,21 @@ const Card = () => {
 
   const uploadToImgBB = async (file) => {
     try {
+      await axiosPublic.delete("/files");
+
       const formData = new FormData();
       formData.append("image", file);
 
       const response = await axios.post(imgHostingApi, formData);
 
       if (response.data.data) {
-        console.log(response.data.data.url);
+        const imgURL = {
+          imgURL: response.data.data.url,
+        };
         // store in DB
+        if (imgURL) {
+          await axiosPublic.post("/files", imgURL);
+        }
       } else {
         throw new Error("Image upload failed");
       }
@@ -63,6 +74,7 @@ const Card = () => {
     newFiles?.forEach(async (file) => {
       await uploadToImgBB(file);
     });
+    refetch()
   };
 
   return (
@@ -121,7 +133,7 @@ const Card = () => {
             className="flex items-center gap-1 cursor-pointer"
           >
             <GrAttachment />
-            <p className="font-semibold text-sm">0</p>
+            <p className="font-semibold text-sm">{data?.length}</p>
           </div>
           <div className="flex items-center gap-1">
             <FaRegCalendarDays />

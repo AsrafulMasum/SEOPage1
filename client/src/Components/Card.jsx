@@ -48,7 +48,11 @@ const Card = () => {
         };
         // store in DB
         if (imgURL) {
-          await axiosPublic.post("/files", imgURL);
+          const res = await axiosPublic.post("/files", imgURL);
+          console.log(res.data);
+          if(res?.data?.insertedId){
+            refetch()
+          }
         }
       } else {
         throw new Error("Image upload failed");
@@ -74,7 +78,6 @@ const Card = () => {
     newFiles?.forEach(async (file) => {
       await uploadToImgBB(file);
     });
-    refetch()
   };
 
   return (
